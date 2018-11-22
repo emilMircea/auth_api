@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: First Item
+  description: first item description
+
+two:
+  name: Second Item
+  description: second item description
+
+three:
+  name: Third Item
+  description: third item description special!!
+
+updated_item:
+  name: Updated name for an item
+  description: updated description for an item
