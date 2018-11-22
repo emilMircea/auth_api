@@ -2,7 +2,6 @@ require 'test_helper'
 
 class ItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @items = items
     @first_item = items(:one)
     @third_item = items(:three)
     @third_item = items(:updated_item)
@@ -11,18 +10,16 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     @name = items(:three).name
     @description = items(:three).description
     # get token to use in different requests
-     sign_in_as(@user)
-    token_hash = JSON.parse @response.body
-    @valid_token = token_hash["auth_token"]
+    sign_in_as(@user)
   end
 
   test "should get index if valid token" do
     get items_url, as: :json, headers: {Authorization: "#{@valid_token}"}
     assert_response :success
     # response yields all items
-    assert_in_delta( @items.count, items.count )
+    assert_equal items.count, JSON.parse(@response.body).count
     # item content is same as in fixture
-    assert_equal items[0].description.to_s, @first_item.description
+    assert_equal items[0].description, JSON.parse(@response.body)[0]["description"]
   end
 
   test "should create item" do
