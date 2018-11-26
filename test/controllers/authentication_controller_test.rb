@@ -1,22 +1,24 @@
-require 'test_helper'
+require "test_helper"
 
 class AuthenticationControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @valid_user = users(:one)
-    @invalid_user = users(:two)
+    @bruno = users(:bruno)
   end
 
   test "auth request returns :ok for valid user" do
     # post to auth endpoint
-    sign_in_as(@valid_user)
-    # post authenticate_url, params: {email: @valid_user.email, password: "foobar12"}
+    sign_in_as(@bruno)
     assert_response :success
     assert_not_nil @response.body
   end
 
-  test "auth request doesn't allow invalid user" do
-    sign_in_as(@invalid_user)
+  test "auth request doesn't allow invalid email" do
+     post authenticate_url, params: {email: 'invalid@gmail.com', password: "foobar12"}, xhr: true
     assert_response :unauthorized
   end
 
+  test "auth request doesn't allow invalid password" do
+     post authenticate_url, params: {email: @bruno.email, password: "foobar"}, xhr: true
+    assert_response :unauthorized
+  end
 end
