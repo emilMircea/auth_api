@@ -1,20 +1,17 @@
-require 'test_helper'
+require "test_helper"
 
 class ItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @first_item = items(:one)
-    @third_item = items(:three)
-    @third_item = items(:updated_item)
-    @user = users(:one)
     # use in post req
-    @name = items(:three).name
-    @description = items(:three).description
+    @name, @description = [items(:three).name, items(:three).description]
     # get token to use in different requests
-    sign_in_as(@user)
+    @bruno = users(:bruno)
+    sign_in_as(@bruno)
   end
 
   test "should get index if valid token" do
-    get items_url, as: :json, headers: {Authorization: "#{@valid_token}"}
+    get items_url, as: :json, headers: {Authorization: @valid_token.to_s}
     assert_response :success
     # response yields all items
     assert_equal items.count, JSON.parse(@response.body).count
@@ -23,42 +20,42 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create item" do
-    assert_difference('Item.count') do
-      post items_url,  
-        headers: {Authorization: "#{@valid_token}"}, 
-        params: { 
-          item: { description: @description, name: @name } 
-        }, 
+    assert_difference("Item.count") do
+      post items_url,
+        headers: {Authorization: @valid_token.to_s},
+        params: {
+          item: {description: @description, name: @name},
+        },
         as: :json
     end
-    
+
     assert_response 201
   end
 
   test "should show item" do
-    get item_url(@first_item), 
-      headers: {Authorization: "#{@valid_token}"}, 
+    get item_url(items),
+      headers: {Authorization: @valid_token.to_s},
       as: :json
     assert_response :success
   end
 
   test "should update item" do
     patch item_url(@first_item),
-    headers: {Authorization: "#{@valid_token}"}, 
-    params: {
-      item: {
-        name: @updated_item.name,
-        description: @updated_item.description
-      } 
-    }, 
-    as: :json
+      headers: {Authorization: @valid_token.to_s},
+      params: {
+        item: {
+          name: @name,
+          description: @description,
+        },
+      },
+      as: :json
     assert_response 200
   end
 
   test "should destroy item" do
-    assert_difference('Item.count', -1) do
-      delete item_url(@third_item),
-        headers: {Authorization: "#{@valid_token}"},
+    assert_difference("Item.count", -1) do
+      delete item_url(@first_item),
+        headers: {Authorization: @valid_token.to_s},
         as: :json
     end
 
