@@ -16,8 +16,6 @@ class AuthenticateUser
   def user
     user = User.find_by_email(email)
     return user if user&.authenticate(password)
-    errors.add :user_authentication, 'invalid email and/or password'
+    errors.add :user_authentication, "invalid email and/or password"
   end
-
-
 end

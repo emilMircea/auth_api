@@ -9,16 +9,16 @@
 # r db:drop && r db:create && r db:migrate && r db:seed && r s -p 3000
 
 User.create!(
-  username: 'bruno',
-  email: 'bruno@rottie.com',
-  password: 'foobar12'
+  username: "bruno",
+  email: "bruno@rottie.com",
+  password: "foobar12"
 )
 
 Item.create!(
-  name: 'first name', 
-  description: 'first description'
+  name: "first name",
+  description: "first description"
 )
 Item.create!(
-  name: 'second name', 
-  description: 'second description'
+  name: "second name",
+  description: "second description"
 )
